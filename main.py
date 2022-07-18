@@ -24,8 +24,9 @@ def home():
 
 #Requests and response body
 
-#Request body
+
 @app.post("/person/new")
+#Request body
 def create_person(person: Person = Body(...)):
     #Response body
     return person
