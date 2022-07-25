@@ -2,7 +2,7 @@
 from typing import Optional
 
 #Pydantic
-from pydantic import BaseModel
+from pydantic import BaseModel,EmailStr,Field
 
 #FastAPI
 from fastapi import FastAPI
@@ -17,6 +17,10 @@ class Person(BaseModel):
     first_name: str 
     last_name: str 
     age: int
+    email: EmailStr = Field(
+        ...,
+        example="myemail@cosasdedevs.com"
+    )
     hair_color: Optional[str] = None
     is_married: Optional[bool] = None
 
