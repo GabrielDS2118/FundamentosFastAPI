@@ -1,5 +1,7 @@
 #Python
+from doctest import Example
 from typing import Optional
+from enum import Enum
 
 #Pydantic
 from pydantic import BaseModel,EmailStr,Field
@@ -13,16 +15,56 @@ app = FastAPI()
 
 #Models
 
+class HairColor(Enum): 
+    
+    white = "white"
+    brown = "brown"
+    black = "black"
+    blonde = "blonde"
+    red = "red"
+
+
 class Person(BaseModel):
-    first_name: str 
-    last_name: str 
-    age: int
-    email: EmailStr = Field(
+
+    first_name: str = Field(
         ...,
-        example="myemail@cosasdedevs.com"
+        min_length = 1,
+        max_length = 50
     )
-    hair_color: Optional[str] = None
-    is_married: Optional[bool] = None
+
+    last_name: str = Field(
+        ...,
+        min_length = 1,
+        max_length = 50
+    )
+
+    age: int = Field(
+        gt = 0,
+        le = 115
+    )
+
+    email: EmailStr = Field(...)
+
+    hair_color: Optional[str] = Field(default = None)
+
+    is_married: Optional[bool] = Field(default = None, example = False)
+
+    class Config:
+
+        schema_extra = {
+
+            "example": {
+
+                "first_name" : "Gabriel",
+                "last_name" : "Aristizabal León",
+                "age" : 19,
+                "email" : "myemail@cosasdedevs.com",
+                "hair_color" : "cafe"
+
+            }
+
+        }
+
 
 class Location(BaseModel):
     city: str
