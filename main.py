@@ -29,41 +29,74 @@ class Person(BaseModel):
     first_name: str = Field(
         ...,
         min_length = 1,
-        max_length = 50
+        max_length = 50,
+        example="Gabriel"
     )
 
     last_name: str = Field(
         ...,
         min_length = 1,
-        max_length = 50
+        max_length = 50,
+        example = "Aristizabal Leon"
     )
 
     age: int = Field(
         gt = 0,
-        le = 115
+        le = 115,
+        example=19
     )
 
-    email: EmailStr = Field(...)
+    email: EmailStr = Field(...,example = "myemail@cosasdedevs.com")
 
-    hair_color: Optional[str] = Field(default = None)
+    hair_color: Optional[str] = Field(default = None, example="cafe")
 
     is_married: Optional[bool] = Field(default = None, example = False)
 
-    class Config:
+    password: str = Field(...,min_length=8)
 
-        schema_extra = {
+    # class Config:
 
-            "example": {
+    #     schema_extra = {
 
-                "first_name" : "Gabriel",
-                "last_name" : "Aristizabal León",
-                "age" : 19,
-                "email" : "myemail@cosasdedevs.com",
-                "hair_color" : "cafe"
+    #         "example": {
 
-            }
+    #             "first_name" : "Gabriel",
+    #             "last_name" : "Aristizabal León",
+    #             "age" : 19,
+    #             "email" : "myemail@cosasdedevs.com",
+    #             "hair_color" : "cafe"
 
-        }
+    #         }
+
+    #     }
+
+class PersonOut(BaseModel):
+
+    first_name: str = Field(
+        ...,
+        min_length = 1,
+        max_length = 50,
+        example="Gabriel"
+    )
+
+    last_name: str = Field(
+        ...,
+        min_length = 1,
+        max_length = 50,
+        example = "Aristizabal Leon"
+    )
+
+    age: int = Field(
+        gt = 0,
+        le = 115,
+        example=19
+    )
+
+    email: EmailStr = Field(...,example = "myemail@cosasdedevs.com")
+
+    hair_color: Optional[str] = Field(default = None, example="cafe")
+
+    is_married: Optional[bool] = Field(default = None, example = False)
 
 
 class Location(BaseModel):
@@ -79,7 +112,7 @@ def home():
 #Requests and response body
 
 
-@app.post("/person/new")
+@app.post("/person/new",response_model=PersonOut)
 #Request body
 # ... -> obligatorio
 def create_person(person: Person = Body(...)):
