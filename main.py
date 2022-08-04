@@ -13,7 +13,7 @@ from fastapi import Body,Query,Path
 
 app = FastAPI()
 
-#Models
+#-----------------Models------------------------#
 
 class HairColor(Enum): 
     
@@ -23,54 +23,7 @@ class HairColor(Enum):
     blonde = "blonde"
     red = "red"
 
-
-class Person(BaseModel):
-
-    first_name: str = Field(
-        ...,
-        min_length = 1,
-        max_length = 50,
-        example="Gabriel"
-    )
-
-    last_name: str = Field(
-        ...,
-        min_length = 1,
-        max_length = 50,
-        example = "Aristizabal Leon"
-    )
-
-    age: int = Field(
-        gt = 0,
-        le = 115,
-        example=19
-    )
-
-    email: EmailStr = Field(...,example = "myemail@cosasdedevs.com")
-
-    hair_color: Optional[str] = Field(default = None, example="cafe")
-
-    is_married: Optional[bool] = Field(default = None, example = False)
-
-    password: str = Field(...,min_length=8)
-
-    # class Config:
-
-    #     schema_extra = {
-
-    #         "example": {
-
-    #             "first_name" : "Gabriel",
-    #             "last_name" : "Aristizabal León",
-    #             "age" : 19,
-    #             "email" : "myemail@cosasdedevs.com",
-    #             "hair_color" : "cafe"
-
-    #         }
-
-    #     }
-
-class PersonOut(BaseModel):
+class PersonBase(BaseModel):
 
     first_name: str = Field(
         ...,
@@ -97,6 +50,19 @@ class PersonOut(BaseModel):
     hair_color: Optional[str] = Field(default = None, example="cafe")
 
     is_married: Optional[bool] = Field(default = None, example = False)
+
+
+class Person(PersonBase):
+
+    password: str = Field(
+        ...,
+        min_length=8,
+        example = "kdlwodpi"
+    )
+
+
+class PersonOut(PersonBase):
+    pass
 
 
 class Location(BaseModel):
@@ -104,6 +70,9 @@ class Location(BaseModel):
     state: str
     country: str
 
+#-----------------Fin Models---------------------#
+
+#-----------------Path Operations----------------#
 @app.get("/")
 def home():
     return {"Hello": "World"}
@@ -179,3 +148,5 @@ def update_person(
     results.update(location.dict())
 
     return results
+
+#-----------------Fin Path Operations----------------#
