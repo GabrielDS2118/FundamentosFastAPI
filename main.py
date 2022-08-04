@@ -8,6 +8,7 @@ from pydantic import BaseModel,EmailStr,Field
 
 #FastAPI
 from fastapi import FastAPI
+from fastapi import status
 from fastapi import Body,Query,Path
 
 
@@ -73,7 +74,10 @@ class Location(BaseModel):
 #-----------------Fin Models---------------------#
 
 #-----------------Path Operations----------------#
-@app.get("/")
+@app.get(
+    path = "/",
+    status_code = status.HTTP_200_OK
+)
 def home():
     return {"Hello": "World"}
 
@@ -81,7 +85,12 @@ def home():
 #Requests and response body
 
 
-@app.post("/person/new",response_model=PersonOut)
+@app.post(
+
+    path="/person/new",
+    response_model=PersonOut,
+    status_code=status.HTTP_201_CREATED
+)
 #Request body
 # ... -> obligatorio
 def create_person(person: Person = Body(...)):
@@ -90,7 +99,10 @@ def create_person(person: Person = Body(...)):
 
 
 #2.Validations: Query Parameters
-@app.get("/person/detail")
+@app.get(
+    path="/person/detail",
+    status_code=status.HTTP_200_OK
+)
 def show_person(
 
     #Opcionalmente recibiremos un str
