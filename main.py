@@ -1,5 +1,6 @@
 #Python
 from doctest import Example
+from os import stat
 from typing import Optional
 from enum import Enum
 
@@ -9,7 +10,8 @@ from pydantic import BaseModel,EmailStr,Field
 #FastAPI
 from fastapi import FastAPI
 from fastapi import status
-from fastapi import Body,Query,Path
+from fastapi import Body,Query,Path,Form
+
 
 
 app = FastAPI()
@@ -71,6 +73,10 @@ class Location(BaseModel):
     state: str
     country: str
 
+class LoginOut(BaseModel):
+    #username = str = Field(...,max_length=20)
+    username: str = Field(..., max_length=20, example="gabriel2022")
+    message:  str = Field(default="Login succesfully!")
 #-----------------Fin Models---------------------#
 
 #-----------------Path Operations----------------#
@@ -128,7 +134,11 @@ def show_person(
 
 
 #3.Validaciones: Path parameters
-@app.get("/person/detail/{person_id}")
+@app.get(
+    path="/person/detail/{person_id}",
+    status_code = status.HTTP_200_OK
+)
+
 def show_person(
 
         person_id: int = Path(
@@ -141,7 +151,10 @@ def show_person(
 
 
 #
-@app.put("/person/{person_id}")
+@app.put(
+    path="/person/{person_id}",
+    status_code=status.HTTP_200_OK
+)
 def update_person(
 
     person_id: int = Path(
@@ -161,4 +174,14 @@ def update_person(
 
     return results
 
+@app.post(
+    path="/login",
+    response_model=LoginOut,
+    status_code=status.HTTP_200_OK
+)
+def login(
+    username: str = Form(...),
+    password: str = Form(...)
+):
+    return LoginOut(username=username)
 #-----------------Fin Path Operations----------------#
