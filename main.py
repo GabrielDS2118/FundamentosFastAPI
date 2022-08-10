@@ -94,7 +94,8 @@ def home():
 
     path="/person/new",
     response_model=PersonOut,
-    status_code=status.HTTP_201_CREATED
+    status_code=status.HTTP_201_CREATED,
+    tags=['Persons']
 )
 #Request body
 # ... -> obligatorio
@@ -106,7 +107,8 @@ def create_person(person: Person = Body(...)):
 #2.Validations: Query Parameters
 @app.get(
     path="/person/detail",
-    status_code=status.HTTP_200_OK
+    status_code=status.HTTP_200_OK,
+    tags=['Persons']
 )
 def show_person(
 
@@ -136,8 +138,11 @@ def show_person(
 persons = [1,2,3,4,5]
 
 @app.get(
+
     path="/person/detail/{person_id}",
-    status_code = status.HTTP_200_OK
+    status_code = status.HTTP_200_OK,
+    tags=['Persons']
+
 )
 
 def show_person(
@@ -161,7 +166,8 @@ def show_person(
 #
 @app.put(
     path="/person/{person_id}",
-    status_code=status.HTTP_200_OK
+    status_code=status.HTTP_200_OK,
+    tags=['Persons']
 )
 def update_person(
 
@@ -186,7 +192,8 @@ def update_person(
 @app.post(
     path="/login",
     response_model=LoginOut,
-    status_code=status.HTTP_200_OK
+    status_code=status.HTTP_200_OK,
+    tags=['Persons']
 )
 def login(
     username: str = Form(...),
