@@ -1,7 +1,4 @@
 #Python
-from doctest import Example
-from email.policy import HTTP
-from os import stat
 from typing import Optional
 from enum import Enum
 
@@ -11,6 +8,7 @@ from pydantic import BaseModel,EmailStr,Field
 #FastAPI
 from fastapi import FastAPI
 from fastapi import status
+from fastapi import HTTPException
 from fastapi import Body,Query,Path,Form,Header,Cookie,UploadFile,File
 
 
@@ -135,6 +133,8 @@ def show_person(
 
 
 #3.Validaciones: Path parameters
+persons = [1,2,3,4,5]
+
 @app.get(
     path="/person/detail/{person_id}",
     status_code = status.HTTP_200_OK
@@ -148,6 +148,13 @@ def show_person(
             example=123
         )
 ):
+    if person_id not in persons:
+
+        raise HTTPException(
+            status_code = status.HTTP_404_NOT_FOUND,
+            detail = 'This person doesn´t exits!'
+        ) 
+        
     return {person_id: "it exists!"}
 
 
